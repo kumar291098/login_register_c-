@@ -7,6 +7,22 @@ struct User {
     std::string password;
 };
 
+std::string encryptPassword(const std::string& password) {
+    std::string encrypted = password;
+    for (char& c : encrypted) {
+        c += 3; // Shift each character by 3 positions
+    }
+    return encrypted;
+}
+
+std::string decryptPassword(const std::string& encryptedPassword) {
+    std::string decrypted = encryptedPassword;
+    for (char& c : decrypted) {
+        c -= 3; // Shift each character back by 3 positions
+    }
+    return decrypted;
+}
+
 void registerUser() {
     User newUser;
     std::cout << "Enter a username: ";
@@ -31,6 +47,7 @@ void registerUser() {
 
     std::cout << "Enter a password: ";
     std::cin >> newUser.password;
+    newUser.password = encryptPassword(newUser.password);
 
     std::ofstream writeFile("users.txt", std::ios::app);
     writeFile << newUser.username << " " << newUser.password << "\n";
@@ -45,6 +62,7 @@ void loginUser() {
     std::cin >> username;
     std::cout << "Enter your password: ";
     std::cin >> password;
+    password = encryptPassword(password);
 
     std::ifstream readFile("users.txt");
     std::string storedUsername, storedPassword;
